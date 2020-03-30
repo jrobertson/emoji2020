@@ -1794,16 +1794,14 @@ class Emoji2020
       
       s = obj
       
-      h.each do |key, value|
-        
-        puts 'key: ' + key.inspect if debug
-        puts 'value: ' + value.inspect if debug
-        
-        next if key.nil? or value.nil?
-        s.gsub!((":%s:" % key.to_s), value)
-        
+      s.gsub!(/:(\w+):/) do |x|
+                
+        emoji = Emoji2020.new(($1).to_sym).to_s
+        emoji ? emoji : ':' + x + ':'
+
       end
-      
+
+      puts 's: ' + s.inspect if debug
       s
       
     end
@@ -1816,7 +1814,7 @@ class Emoji2020
   def find(keyword)
     
     r = search(keyword.to_s)
-    return unless r
+    return unless r.any?
     
     line = r.first
     _, title = line.strip.gsub(/\s+#[^\n]+/,'').split(/ /,2)
