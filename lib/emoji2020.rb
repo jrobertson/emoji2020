@@ -563,7 +563,7 @@ EMOJI = "
     🕸 Spider Web
     🦂 Scorpion
     🦟 Mosquito
-    🦠 Microbe
+    🦠 Microbe #virus
     💐 Bouquet
     🌸 Cherry Blossom
     💮 White Flower
@@ -1776,16 +1776,19 @@ EMOJI = "
 
 class Emoji2020
 
-  def initialize(obj, debug: false)
+  def initialize(obj=nil, debug: false)
 
-    a = EMOJI.strip.gsub(/^#[^\n]+\n/,'').gsub(/^\n/,'').lines\
+    a = EMOJI.strip.gsub(/\s+#[^\n]+/,'').gsub(/^\n/,'').lines\
         .map {|x| x.chomp.lstrip.split(/ /,2).reverse}
     h = a.map {|key, value| [key.downcase.gsub(/\W+/,'_').to_sym, value]}.to_h
     puts 'h: ' + h.inspect if debug
 
     @s = case obj.class.to_s
     when 'Symbol'
-      h[obj]
+      
+      keyword = obj
+      r = h[keyword]
+      r ? r : h[find(keyword)]      
       
     when 'String'
       
@@ -1806,15 +1809,42 @@ class Emoji2020
     end
     
   end
+  
+  # accepts a search keyword and returns the markdown name of the emoji 
+  #   e.g. find('sunrise') #=> :sunrise:
+  #
+  def find(keyword)
+    
+    r = search(keyword.to_s)
+    return unless r
+    
+    line = r.first
+    _, title = line.strip.gsub(/\s+#[^\n]+/,'').split(/ /,2)
+    title.downcase.gsub(/\W+/,'_').to_sym
 
+  end
+  
+  # accepts a search keyword and returns a raw listing of emoji search results
+  #
+  def search(keyword)
+    EMOJI.lines.grep /#{keyword}/i
+  end
+
+  # returns decimal value of each Unicode byte sequence used to 
+  #   construct the emoji
+  #
   def to_a()
     @s.unpack('U*')
   end
 
+  # returns the emoji
+  #
   def to_s()
     @s
   end
 
+  # returns the Unicode value of the current emoji
+  #
   def to_unicode()
     "U+{%s}" % self.to_a.map {|x| x.to_s(16)}.join(' ')
   end
