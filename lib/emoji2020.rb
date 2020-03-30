@@ -646,7 +646,6 @@ EMOJI = "
 
 🍔 Food & Drink
 
-Emojis for fruit, vegetables, meals, beverages and utensils.
 
     🍇 Grapes
     🍈 Melon
@@ -1779,23 +1778,33 @@ class Emoji2020
 
   def initialize(obj, debug: false)
 
-    a = EMOJI.strip.gsub(/^#[^\n]+\n/,'').lines.map {|x| x.chomp.lstrip.split(/ /,2).reverse}
+    a = EMOJI.strip.gsub(/^#[^\n]+\n/,'').gsub(/^\n/,'').lines\
+        .map {|x| x.chomp.lstrip.split(/ /,2).reverse}
     h = a.map {|key, value| [key.downcase.gsub(/\W+/,'_').to_sym, value]}.to_h
     puts 'h: ' + h.inspect if debug
 
     @s = case obj.class.to_s
     when 'Symbol'
       h[obj]
+      
     when 'String'
+      
       s = obj
+      
       h.each do |key, value|
-        puts 'key: ' + key.inspect
-        puts 'value: ' + value.inspect
+        
+        puts 'key: ' + key.inspect if debug
+        puts 'value: ' + value.inspect if debug
+        
         next if key.nil? or value.nil?
-        s = obj.gsub(":%s:" % key.to_s, value)
+        s.gsub!((":%s:" % key.to_s), value)
+        
       end
+      
       s
+      
     end
+    
   end
 
   def to_a()
@@ -1811,4 +1820,3 @@ class Emoji2020
   end
 
 end
-
