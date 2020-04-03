@@ -1582,7 +1582,7 @@ EMOJI = "
     🇪🇷 Flag: Eritrea
     🇪🇸 Flag: Spain
     🇪🇹 Flag: Ethiopia
-    🇪🇺 Flag: European Union
+    🇪🇺 Flag: European Union #eu
     🇫🇮 Flag: Finland
     🇫🇯 Flag: Fiji
     🇫🇰 Flag: Falkland Islands
@@ -1590,7 +1590,7 @@ EMOJI = "
     🇫🇴 Flag: Faroe Islands
     🇫🇷 Flag: France
     🇬🇦 Flag: Gabon
-    🇬🇧 Flag: United Kingdom
+    🇬🇧 Flag: United Kingdom #uk #gb
     🇬🇩 Flag: Grenada
     🇬🇪 Flag: Georgia
     🇬🇫 Flag: French Guiana
@@ -1749,7 +1749,7 @@ EMOJI = "
     🇺🇬 Flag: Uganda
     🇺🇲 Flag: U.S. Outlying Islands
     🇺🇳 Flag: United Nations
-    🇺🇸 Flag: United States
+    🇺🇸 Flag: United States #us #usa
     🇺🇾 Flag: Uruguay
     🇺🇿 Flag: Uzbekistan
     🇻🇦 Flag: Vatican City
@@ -1772,6 +1772,52 @@ EMOJI = "
     🏴󠁧󠁢󠁷󠁬󠁳󠁿 Flag: Wales
     🏴󠁵󠁳󠁴󠁸󠁿 Flag for Texas (US-TX)
 
+
+# Events
+
+    🇦🇺 Australia Day
+    🇫🇷 Bastille Day
+    🎂 Birthday
+    🛍 Black Friday
+    🇨🇦 Canada Day
+    🇧🇷 Carnaval
+    🐉 Chinese New Year
+    🎅 Christmas #xmas
+    🇲🇽 Cinco de Mayo
+    🦠 Coronavirus #covid19
+    🕯 Diwali
+    🇨🇳 Dragon Boat Festival
+    🐰 Easter
+    🎥 Emoji Movie
+    🍂 Fall / Autumn
+    👨 Father’s Day
+    💪 Festivus
+    🎓 Graduation
+    🔥 Guy Fawkes
+    🎃 Halloween
+    🕎 Hanukkah
+    💕 Hearts
+    🕉 Holi
+    🇺🇸 Independence Day
+    👩 Mother’s Day
+    🎊 New Year’s Eve
+    🏊 Olympics
+    🏳️‍🌈 Pride
+    👑 Queen’s Birthday
+    ☪ Ramadan
+    🌱 Spring
+    🏴 St Andrew’s Day
+    ☘ St Patrick’s Day
+    ☀ Summer
+    🏈 Super Bowl
+    🦃 Thanksgiving
+    💘 Valentine’s Day
+    👰 Wedding / Marriage
+    ⛄ Winter
+    🎿 Winter Olympics
+    ⚽ World Cup
+    🌎 World Emoji Day
+    
 "
 
 class Emoji2020
@@ -1814,6 +1860,7 @@ class Emoji2020
   def find(keyword)
     
     r = search(keyword.to_s)
+    
     return unless r.any?
     
     line = r.first
@@ -1825,7 +1872,22 @@ class Emoji2020
   # accepts a search keyword and returns a raw listing of emoji search results
   #
   def search(keyword)
-    EMOJI.lines.grep /#{keyword}/i
+    
+    a = keyword.split(/[ _]/)
+
+    a2 = a.map do |x|
+
+      r = EMOJI.lines.grep /\b#{x}\b/i
+      if r.any? then
+        r
+      else
+        EMOJI.lines.grep /#{x}/i
+      end
+
+    end
+
+    a2.inject() {|r,x| r & x }
+    
   end
 
   # returns decimal value of each Unicode byte sequence used to 
