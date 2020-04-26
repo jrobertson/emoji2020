@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'emoji2020'
-  s.version = '0.2.0'
+  s.version = '0.2.1'
   s.summary = 'Makes it convenient to find a Twitter style emoji ' + 
       'e.g. Emoji2020.new(:sunrise).to_s #=> 🌅'
   s.authors = ['James Robertson']

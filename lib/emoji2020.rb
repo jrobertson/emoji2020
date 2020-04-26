@@ -1642,7 +1642,7 @@ EMOJI = "
     🇰🇿 Flag: Kazakhstan
     🇱🇦 Flag: Laos
     🇱🇧 Flag: Lebanon
-    🇱🇨 Flag: St. Lucia
+    🇱🇨 Flag: St. Lucia #stlucia
     🇱🇮 Flag: Liechtenstein
     🇱🇰 Flag: Sri Lanka
     🇱🇷 Flag: Liberia
@@ -1799,19 +1799,19 @@ EMOJI = "
     💕 Hearts
     🕉 Holi
     🇺🇸 Independence Day
-    👩 Mother’s Day
-    🎊 New Year’s Eve
+    👩 Mother’s Day #mothers
+    🎊 New Year’s Eve #newyears
     🏊 Olympics
     🏳️‍🌈 Pride
-    👑 Queen’s Birthday
+    👑 Queen’s Birthday #queens_birthday
     ☪ Ramadan
     🌱 Spring
-    🏴 St Andrew’s Day
-    ☘ St Patrick’s Day
+    🏴 St Andrew’s Day #st_andrews
+    ☘ St Patrick’s Day #st_patricks
     ☀ Summer
     🏈 Super Bowl
     🦃 Thanksgiving
-    💘 Valentine’s Day
+    💘 Valentine’s Day #valentines
     👰 Wedding / Marriage
     ⛄ Winter
     🎿 Winter Olympics
@@ -1819,6 +1819,16 @@ EMOJI = "
     🌎 World Emoji Day
     
 "
+
+class String
+  
+  def to_fullwidth() # ｆｕｌｌｗｉｄｔｈ
+    self.chars.map {|x| [65248 + x.ord].pack("U*") }.join.gsub("\uFF00",'  ')
+  end
+  
+end
+
+
 
 class Emoji2020
 
@@ -1878,6 +1888,7 @@ class Emoji2020
     a2 = a.map do |x|
 
       r = EMOJI.lines.grep /\b#{x}\b/i
+      
       if r.any? then
         r
       else
@@ -1886,7 +1897,7 @@ class Emoji2020
 
     end
 
-    a2.inject() {|r,x| r & x }
+    a2.inject(:&)
     
   end
 
